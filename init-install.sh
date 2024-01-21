@@ -2,7 +2,8 @@
 
 FILE=installed.lock
 if [ -f "$FILE" ]; then
-    echo "Already installed"
+    echo "Already installed! Script will delete all Files, at rerunn it will reinstall Shopware"
+    find /var/www/html/ -mindepth 1 -maxdepth 1 ! -name 'init-install.sh' -exec rm -rf {} \;
 else
     echo "Waiting 8 seconds for the Database Container"
     sleep 8s
