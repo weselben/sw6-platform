@@ -12,7 +12,7 @@ RUN chmod +x /var/www/html/custom-scripts/init-install.sh
 
 #Custom Shopware Settings
 
-RUN echo -e "shopware:\n  admin_worker:\n    enable_admin_worker: false" > /var/www/html/config/packages/shopware.yaml
+RUN echo -e "shopware:\n  admin_worker:\n    enable_admin_worker: false" >> /var/www/html/config/packages/shopware.yaml
 
 RUN echo -e "shopware:\n  increment:\n    user_activity:\n      type: 'redis'\n      config:\n        url: 'redis://$REDIS_SESSION_HOST:$REDIS_SESSION_PORT/0'\n    message_queue:\n      type: 'redis'\n      config:\n        url: 'redis://$REDIS_SESSION_HOST:$REDIS_SESSION_PORT/0'" > /var/www/html/config/packages/prod/shopware.yaml
 
