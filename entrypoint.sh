@@ -257,8 +257,8 @@ if [ $RECOVERY_MODE = 0 ]; then
         php	bin/console system:generate-jwt-secret --force
     
         # Use SHOP_DOMAIN environment variable for storefront creation
-        if [ -n "$APP_URL" ]; then
-            php bin/console sales-channel:create:storefront --url="$APP_URL"
+        if [ -n "$SHOP_DOMAIN" ]; then
+            php bin/console sales-channel:create:storefront --url="http://$SHOP_DOMAIN"
         else
             echo "Error: SHOP_DOMAIN environment variable not set."
             php bin/console sales-channel:create:storefront --url=http://localhost
