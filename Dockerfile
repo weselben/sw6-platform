@@ -10,6 +10,10 @@ COPY ./custom-scripts/init-install.sh /var/www/html/custom-scripts/init-install.
 # Set the correct permissions for the entrypoint.sh file
 RUN chmod +x /var/www/html/custom-scripts/init-install.sh
 
+COPY ./boot_end.sh /var/www/boot_end.sh
+
+RUN chmod +x /var/www/boot_end.sh
+
 # Expose ports 80 and 443
 EXPOSE 80 443
 
