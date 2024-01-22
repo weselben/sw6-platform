@@ -243,8 +243,44 @@ if [ $RECOVERY_MODE = 0 ]; then
     fi
 
     echo "Running Custom Commands"
+    chown 33:33 -R /var/www/html
 
-    chown 33:33 -R /var/www/html/.
+    FILE=installed.lock
+    if [ -f "$FILE" ]; then
+        echo "Already installed! Script will just start Shopware"
+    else
+        echo "Waiting 8 seconds for the Database Container"
+        sleep 8s
+    
+        php bin/console assets:install
+        php bin/console system:install --force
+        php	bin/console system:generate-jwt-secret --force
+    
+        # Use SHOP_DOMAIN environment variable for storefront creation
+        if [ -n "$APP_URL" ]; then
+            php bin/console sales-channel:create:storefront --url="$APP_URL"
+        else
+            echo "Error: SHOP_DOMAIN environment variable not set."
+            php bin/console sales-channel:create:storefront --url=http://localhost
+        fi
+    
+        #php bin/console sales-channel:create:storefront --url=http://localhost
+    
+        # Use environment variables for admin credentials
+        if [ -n "$INSTALL_ADMIN_USERNAME" ] && [ -n "$INSTALL_ADMIN_PASSWORD" ]; then
+            php bin/console user:create -a -p "$INSTALL_ADMIN_PASSWORD" "$INSTALL_ADMIN_USERNAME"
+        else
+            echo "Error: INSTALL_ADMIN_USERNAME or INSTALL_ADMIN_PASSWORD environment variables not set."
+            php bin/console user:create -a -p "admin" "admin"
+        fi
+
+        echo "CHOWN All Files in /var/www/html/"
+
+        chown 33:33 -R /var/www/html
+        
+        touch installed.lock
+        exit
+    fi
 
     # ------------------------------------------------------------------------------------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------------------
