@@ -1,4 +1,4 @@
-FROM dockware/dev:6.5.8.0-amd64
+FROM dockware/dev:6.5.8.2-amd64
 
 USER dockware
 
